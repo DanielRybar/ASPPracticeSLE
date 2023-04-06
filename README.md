@@ -154,4 +154,19 @@ var userId = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOr
 * https://learn.microsoft.com/cs-cz/aspnet/core/mvc/views/tag-helpers/intro?view=aspnetcore-5.0
 
 ## Relační proměnná
-* ...
+* dočasné ukládání uživatelských dat
+* na rozdíl od cookies, které jsou ukládány do PC uživatele, sessions se ukládají na serveru
+* implementace session v ASP.NET ve skutečnosti umí ukládat jen pole bytů, pro uložení větších dat je nutné použít serializaci a deserializaci dat
+
+### Kód
+```csharp
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // volitelně doba platnosti session
+});// samotný mechanismus session
+builder.Services.AddMemoryCache(); // uložiště pro session
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // pro zpřístupnění Session uvnitř služeb a stránek
+
+// ...
+
+app.UseSession(); // aktivování mechanismu Session
+```

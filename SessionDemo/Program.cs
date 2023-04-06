@@ -3,6 +3,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // volitelnì doba platnosti session
+});// samotný mechanismus session
+builder.Services.AddMemoryCache(); // uložištì pro session
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // pro zpøístupnìní Session uvnitø služeb a stránek
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,5 +27,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.UseSession();
 
 app.Run();

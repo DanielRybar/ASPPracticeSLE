@@ -5,4 +5,7 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+
+<div class="text-center">
+    <h3 class="display-4">@((!String.IsNullOrEmpty(Model.Result)) ? Model.Result : "Session je prázdná.")</h3>
+</div>

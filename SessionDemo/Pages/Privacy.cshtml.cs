@@ -1,19 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 
 namespace SessionDemo.Pages
 {
     public class PrivacyModel : PageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
+        private readonly IHttpContextAccessor _hca; // HttpContextAccessor zpřístupní HttpContext
+        private ISession _session => _hca.HttpContext.Session;
 
-        public PrivacyModel(ILogger<PrivacyModel> logger)
+        private const string SessionKey = "MY_SESS"; // identifikátor session proměnné
+        public string Result { get; set; }
+
+        public PrivacyModel(IHttpContextAccessor hca)
         {
-            _logger = logger;
+            _hca = hca;
         }
 
         public void OnGet()
         {
+            Result = _session.GetString(SessionKey);
         }
     }
 }
