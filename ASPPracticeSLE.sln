@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentsWithIdentity", "Stu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionDemo", "SessionDemo\SessionDemo.csproj", "{A800E4B1-2D72-470B-A1CA-421E02EE1F43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiSimple", "ApiSimple\ApiSimple.csproj", "{989B2D78-2373-4632-BC3F-EF9A3DE9DA86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A800E4B1-2D72-470B-A1CA-421E02EE1F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A800E4B1-2D72-470B-A1CA-421E02EE1F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A800E4B1-2D72-470B-A1CA-421E02EE1F43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{989B2D78-2373-4632-BC3F-EF9A3DE9DA86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{989B2D78-2373-4632-BC3F-EF9A3DE9DA86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{989B2D78-2373-4632-BC3F-EF9A3DE9DA86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{989B2D78-2373-4632-BC3F-EF9A3DE9DA86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
