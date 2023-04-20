@@ -62,8 +62,8 @@ namespace StudentsWithIdentity.Data
                 EmailConfirmed = true,
                 UserName = "danryba@pslib.cz",
                 NormalizedUserName = "DANRYBA@PSLIB.CZ",
-                //Firstname = "Daniel",
-                //Lastname = "Rybář",
+                Firstname = "Daniel",
+                Lastname = "Rybář",
                 LockoutEnabled = false,
                 SecurityStamp = string.Empty,
                 PasswordHash = hasher.HashPassword(null, "beruska")

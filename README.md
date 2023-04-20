@@ -145,9 +145,164 @@ builder.Services.AddRazorPages(options =>
              options.Conventions.AuthorizeAreaFolder("Admin", "/", "IsAdministrator"); // bez IsAdministrator vstup pouze pro prihlasene uzivatele
          });
 ```
-Získaní ID aktuálně přihlášeného uživatele
+Získání ID aktuálně přihlášeného uživatele
 ```csharp
 var userId = User.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
+```
+
+### Rozšíření o jméno a příjmení
+
+1) ApplicationUser
+```csharp
+public class ApplicationUser : IdentityUser
+{
+    [Display(Name = "Jméno")]
+    [PersonalData] // mělo by být uvedeno u osobních dat, která vyžadují zvýšenou ochranu
+    [Required(ErrorMessage = "Jméno musí být vyplněno.")]
+    public string Firstname { get; set; } = String.Empty;
+
+    [Display(Name = "Příjmení")]
+    [PersonalData]
+    [Required(ErrorMessage = "Příjmení musí být vyplněno.")]
+    public string Lastname { get; set; } = String.Empty;
+
+    [NotMapped] // tato položka v databázi nebude, ale objekt nám ji sám spočítá
+    public string Fullname
+    {
+        get
+        {
+            return Firstname + " " + Lastname;
+        }
+    }
+}
+```
+
+2) Přidání jména a přijmení do seedu, opravné migrace a načtení DB
+
+3) Úprava nascaffoldovaných stránek v Areas/Identity/Pages
+
+#### Register.cshtml.cs
+```csharp
+public class InputModel
+{
+    [Display(Name = "Jméno")]
+    [PersonalData] // mělo by být uvedeno u osobních dat, která vyžadují zvýšenou ochranu
+    [Required(ErrorMessage = "Jméno musí být vyplněno.")]
+    public string Firstname { get; set; } = String.Empty;
+
+    [Display(Name = "Příjmení")]
+    [PersonalData]
+    [Required(ErrorMessage = "Příjmení musí být vyplněno.")]
+    public string Lastname { get; set; } = String.Empty;
+
+   // ...
+}
+```
+v metodě OnPostAsync
+```csharp
+if (ModelState.IsValid)
+{
+    var user = CreateUser();
+
+    user.Firstname = Input.Firstname;
+    user.Lastname = Input.Lastname;
+    
+    // ...
+}
+```
+
+#### Register.cshtml
+```csharp
+<div class="form-floating">
+    <input asp-for="Input.Firstname" class="form-control" autocomplete="firstname" aria-required="true" />
+    <label asp-for="Input.Firstname"></label>
+    <span asp-validation-for="Input.Firstname" class="text-danger"></span>
+</div>
+<div class="form-floating">
+    <input asp-for="Input.Lastname" class="form-control" autocomplete="lastname" aria-required="true" />
+    <label asp-for="Input.Lastname"></label>
+    <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+</div>
+```
+
+#### Manage/Index.cshtml.cs
+```csharp
+// je potřeba připojit DbContext (konstruktor)
+public class InputModel
+{
+    [Display(Name = "Jméno")]
+    [PersonalData] // mělo by být uvedeno u osobních dat, která vyžadují zvýšenou ochranu
+    [Required(ErrorMessage = "Jméno musí být vyplněno.")]
+    public string Firstname { get; set; } = String.Empty;
+
+    [Display(Name = "Příjmení")]
+    [PersonalData]
+    [Required(ErrorMessage = "Příjmení musí být vyplněno.")]
+    public string Lastname { get; set; } = String.Empty;
+
+   // ...
+}
+```
+```csharp
+private async Task LoadAsync(ApplicationUser user)
+{
+    var userName = await _userManager.GetUserNameAsync(user);
+    var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+
+    Username = userName;
+
+    Input = new InputModel
+    {
+        PhoneNumber = phoneNumber,
+        Firstname = user.Firstname,
+        Lastname = user.Lastname
+    };
+}
+```
+```csharp
+// do OnPostAsync před await _signInManager.RefreshSignInAsync(user);
+if (Input.Firstname != user.Firstname)
+{
+    user.Firstname = Input.Firstname;
+}
+
+if (Input.Lastname != user.Lastname)
+{
+    user.Lastname = Input.Lastname;
+}
+_context.SaveChanges();
+```
+
+#### Manage/Index.cshtml
+```csharp
+<div class="form-floating">
+    <input asp-for="Input.Firstname" class="form-control" autocomplete="firstname" aria-required="true" />
+    <label asp-for="Input.Firstname"></label>
+    <span asp-validation-for="Input.Firstname" class="text-danger"></span>
+</div>
+<div class="form-floating">
+    <input asp-for="Input.Lastname" class="form-control" autocomplete="lastname" aria-required="true" />
+    <label asp-for="Input.Lastname"></label>
+    <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+</div>
+```
+
+4) Pages/Shared/_LoginPartial.cshtml
+```csharp
+@using Microsoft.AspNetCore.Identity
+@using StudentsWithIdentity.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+```
+```csharp
+@if (!String.IsNullOrEmpty((await (UserManager.GetUserAsync(User))).Firstname) && !String.IsNullOrEmpty((await (UserManager.GetUserAsync(User))).Lastname))
+{
+    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Ahoj <b>@((await UserManager.GetUserAsync(User)).Firstname) @((await UserManager.GetUserAsync(User)).Lastname)!</b></a>
+}
+else
+{
+    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Ahoj <b>@UserManager.GetUserName(User)!</b></a>
+}
 ```
 
 ## Tag helpery

@@ -52,7 +52,7 @@ namespace StudentsWithIdentity.Migrations
                         new
                         {
                             Id = "5c9c1e5f-401c-4cc2-a395-eb1f3c927998",
-                            ConcurrencyStamp = "9de05e10-87d6-411c-b759-4cb92a2ec794",
+                            ConcurrencyStamp = "cce5d4b7-4b71-45b7-8c4e-6938233d5e27",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -203,6 +203,14 @@ namespace StudentsWithIdentity.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Firstname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Lastname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -253,13 +261,15 @@ namespace StudentsWithIdentity.Migrations
                         {
                             Id = "caa3e5b9-5e96-4ce9-aa16-2a0b0520e815",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dc9a35d6-d47b-4643-a9b6-b4d42be505cb",
+                            ConcurrencyStamp = "4143405e-8b06-439b-8d09-bb36820906ba",
                             Email = "danryba@pslib.cz",
                             EmailConfirmed = true,
+                            Firstname = "Daniel",
+                            Lastname = "Rybář",
                             LockoutEnabled = false,
                             NormalizedEmail = "DANRYBA@PSLIB.CZ",
                             NormalizedUserName = "DANRYBA@PSLIB.CZ",
-                            PasswordHash = "AQAAAAEAACcQAAAAELbj+a9Jtl87C4XsQsG9stCZ667K2UiJEn2zhJB1JPs0uTyxtHvwxs0xh0IDoYM/vw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJ+hdmfoUh+g/tnK7IicbbcNSy4RDYlbj2LN3+xBacUA3SDDfZdRZZZfjs9I/XAc3Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,

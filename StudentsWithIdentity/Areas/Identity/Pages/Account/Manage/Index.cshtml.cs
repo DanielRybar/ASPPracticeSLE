@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using StudentsWithIdentity.Data;
 using StudentsWithIdentity.Models;
 
 namespace StudentsWithIdentity.Areas.Identity.Pages.Account.Manage
@@ -17,13 +18,17 @@ namespace StudentsWithIdentity.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly AppDbContext _context;
+
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         /// <summary>
@@ -52,6 +57,17 @@ namespace StudentsWithIdentity.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
+            [Display(Name = "Jméno")]
+            [PersonalData] // mělo by být uvedeno u osobních dat, která vyžadují zvýšenou ochranu
+            [Required(ErrorMessage = "Jméno musí být vyplněno.")]
+            public string Firstname { get; set; } = String.Empty;
+
+            [Display(Name = "Příjmení")]
+            [PersonalData]
+            [Required(ErrorMessage = "Příjmení musí být vyplněno.")]
+            public string Lastname { get; set; } = String.Empty;
+
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -70,7 +86,9 @@ namespace StudentsWithIdentity.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname
             };
         }
 
@@ -110,6 +128,17 @@ namespace StudentsWithIdentity.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            if (Input.Firstname != user.Firstname)
+            {
+                user.Firstname = Input.Firstname;
+            }
+
+            if (Input.Lastname != user.Lastname)
+            {
+                user.Lastname = Input.Lastname;
+            }
+            _context.SaveChanges();
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StudentsWithIdentity.Migrations
 {
-    public partial class _02Identity : Migration
+    public partial class _02addingname : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,6 +28,8 @@ namespace StudentsWithIdentity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -46,6 +48,19 @@ namespace StudentsWithIdentity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Classrooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classrooms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,15 +169,46 @@ namespace StudentsWithIdentity.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ClassroomId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_Classrooms_ClassroomId",
+                        column: x => x.ClassroomId,
+                        principalTable: "Classrooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "5c9c1e5f-401c-4cc2-a395-eb1f3c927998", "9de05e10-87d6-411c-b759-4cb92a2ec794", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "5c9c1e5f-401c-4cc2-a395-eb1f3c927998", "cce5d4b7-4b71-45b7-8c4e-6938233d5e27", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "caa3e5b9-5e96-4ce9-aa16-2a0b0520e815", 0, "dc9a35d6-d47b-4643-a9b6-b4d42be505cb", "danryba@pslib.cz", true, false, null, "DANRYBA@PSLIB.CZ", "DANRYBA@PSLIB.CZ", "AQAAAAEAACcQAAAAELbj+a9Jtl87C4XsQsG9stCZ667K2UiJEn2zhJB1JPs0uTyxtHvwxs0xh0IDoYM/vw==", null, false, "", false, "danryba@pslib.cz" });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "Firstname", "Lastname", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "caa3e5b9-5e96-4ce9-aa16-2a0b0520e815", 0, "4143405e-8b06-439b-8d09-bb36820906ba", "danryba@pslib.cz", true, "Daniel", "Rybář", false, null, "DANRYBA@PSLIB.CZ", "DANRYBA@PSLIB.CZ", "AQAAAAEAACcQAAAAEJ+hdmfoUh+g/tnK7IicbbcNSy4RDYlbj2LN3+xBacUA3SDDfZdRZZZfjs9I/XAc3Q==", null, false, "", false, "danryba@pslib.cz" });
+
+            migrationBuilder.InsertData(
+                table: "Classrooms",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "P4" },
+                    { 2, "P3" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserClaims",
@@ -173,6 +219,16 @@ namespace StudentsWithIdentity.Migrations
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[] { "5c9c1e5f-401c-4cc2-a395-eb1f3c927998", "caa3e5b9-5e96-4ce9-aa16-2a0b0520e815" });
+
+            migrationBuilder.InsertData(
+                table: "Students",
+                columns: new[] { "Id", "BirthDate", "ClassroomId", "Firstname", "Lastname" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2004, 1, 14, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Cyril", "Cvrček" },
+                    { 2, new DateTime(2005, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Jana", "Jánská" },
+                    { 3, new DateTime(2003, 12, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Adam", "Alois" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -212,6 +268,11 @@ namespace StudentsWithIdentity.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_ClassroomId",
+                table: "Students",
+                column: "ClassroomId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -232,10 +293,16 @@ namespace StudentsWithIdentity.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Students");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Classrooms");
         }
     }
 }
