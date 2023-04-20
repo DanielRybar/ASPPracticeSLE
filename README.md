@@ -295,14 +295,7 @@ _context.SaveChanges();
 @inject UserManager<ApplicationUser> UserManager
 ```
 ```csharp
-@if (!String.IsNullOrEmpty((await (UserManager.GetUserAsync(User))).Firstname) && !String.IsNullOrEmpty((await (UserManager.GetUserAsync(User))).Lastname))
-{
-    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Ahoj <b>@((await UserManager.GetUserAsync(User)).Firstname) @((await UserManager.GetUserAsync(User)).Lastname)!</b></a>
-}
-else
-{
-    <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Ahoj <b>@UserManager.GetUserName(User)!</b></a>
-}
+<a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Ahoj <b>@((await UserManager.GetUserAsync(User)).Fullname)!</b></a>
 ```
 
 ## Tag helpery
