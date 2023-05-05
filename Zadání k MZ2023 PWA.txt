@@ -1,0 +1,11 @@
+13: Navrhněte ER model databáze dle následujícího textu. (stačí namalovat v draw.io nebo na papír)
+14: Na následujících příkladech ukažte, k jakým chybám došlo během návrhu databází z hlediska jejich optimalizace a normalizace. Vytvořte návrh nových databází, které budou bez těchto chyb. (stačí namalovat v draw.io nebo na papír)
+15: Vytvořte SQL dotazy, které vykonají určené úkoly.  (databáze je přístupná přes adminer)
+16: Máme databázi s následující strukturou: databáze má několik tabulek s vazbou N:M, proveďte několik SQL dotazů. (adminer)
+17: Identifikujte správné HTML značky. Dostanete HTML soubor, ve kterém máte divy nahradit za jiné značky.
+18: V připraveném HTML souboru vytvořte tři ukázky demonstrující možnosti pozicování podle screenshotů.  
+19: Vytvořte jednoduchou ukázkovou aplikaci v ASP.NET obsahující dvě stránky, předávejte mezi nimi data přes odkazy a přes session.
+20: Vytvořte novou čistou instalaci aplikace ve frameworku ASP.NET. Implementujte mechanismus přihlašování. Vytvořte rozumná pravidla definující heslo. Rozšiřte standardní implementaci uživatele o jméno a příjmení.
+21: Vytvořte novou ASP.NET aplikaci pro přidávání informací do databáze. Vytvořte novou stránku Create přes kterou bude možné položky přidávat. Na stránce Index zobrazujte všechny záznamy z databáze. Stránky Index a Create propojte. 
+22: Vytvoření API na dvou tabulkách s metodami a rozhraním Swagger
+23: Jednoduchá aplikace v Reactu (create-react-app) s předáváním informací přes props a použitím state.
